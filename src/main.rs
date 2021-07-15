@@ -10,11 +10,22 @@
 
 use core::panic::PanicInfo;
 
+#[cfg(not(test))] // ignore when testing
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
     println!("{}", info);
     loop {}
 }
+
+#[cfg(test)]
+#[panic_handler]
+fn panic(info: &PanicInfo) -> ! {
+    serial_println!("[failed]\n");
+    serial_println!("Error: {}\n", info);
+    exit_qemu(QemuExitCode::Failure);
+    loop {}
+}
+
 
 mod serial;
 mod vga_buffer;
