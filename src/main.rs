@@ -17,7 +17,7 @@ fn panic(info: &PanicInfo) -> ! {
     loop {}
 }
 
-#[cfg(test)]
+#[cfg(test)] // only use when testing
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
     serial_println!("[failed]\n");
