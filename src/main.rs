@@ -80,7 +80,9 @@ fn test_runner(tests: &[&dyn Testable]) {
 }
 
 #[test_case]
-fn trivial_ok() { assert_eq!(1, 1); }
+fn trivial_assertion() { assert_eq!(1, 1); }
 
 #[test_case]
-fn trivial_fail() { assert_eq!(1, 0); }
+fn test_println_simple() {
+    println!("test_println_simple output");
+}
