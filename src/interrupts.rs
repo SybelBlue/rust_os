@@ -7,7 +7,11 @@ lazy_static! {
     static ref IDT: InterruptDescriptorTable = {
         let mut idt = InterruptDescriptorTable::new();
         idt.breakpoint.set_handler_fn(breakpoint_handler);
-        idt.double_fault.set_handler_fn(double_fault_handler);
+        unsafe {
+            idt.double_fault.set_handler_fn(double_fault_handler)
+                // unsafe set
+                .set_stack_index(crate::gdt::DOUBLE_FAULT_IST_INDEX);
+        }
         idt
     };
 }
