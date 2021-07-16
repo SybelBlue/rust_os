@@ -147,8 +147,6 @@ pub fn _print(args: fmt::Arguments) {
 }
 
 mod tests {
-    use super::*;
-
     #[test_case]
     fn println_simple() {
         println!("test_println_simple output");
@@ -163,6 +161,7 @@ mod tests {
 
     #[test_case]
     fn println_output() {
+        use super::*;
         let s = "Some test string that fits on a single line";
         println!("{}", s);
         for (i, c) in s.chars().enumerate() {
