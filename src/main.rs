@@ -4,8 +4,6 @@
 #![test_runner(rust_os::test_runner)]
 #![reexport_test_harness_main = "test_main"]
 
-extern crate alloc;
-
 use rust_os::println;
 use core::panic::PanicInfo;
 use bootloader::{BootInfo, entry_point};
