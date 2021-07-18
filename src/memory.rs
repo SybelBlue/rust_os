@@ -94,3 +94,11 @@ impl BootInfoFrameAllocator {
             .map(PhysFrame::containing_address)
     }
 }
+
+unsafe impl FrameAllocator<Size4KiB> for BootInfoFrameAllocator {
+    fn allocate_frame(&mut self) -> Option<PhysFrame<Size4KiB>> {
+        let frame = self.usuable_frames().nth(self.next);
+        self.next += 1;
+        frame
+    }
+}
