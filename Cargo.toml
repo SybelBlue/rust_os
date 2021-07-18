@@ -11,7 +11,6 @@ edition = "2018"
 # panic = "abort"
 
 [dependencies]
-bootloader = "0.9.8"
 volatile = "0.2.6"
 spin = "0.5.2"
 x86_64 = "0.14.2" # cpu architecture
@@ -22,6 +21,10 @@ pc-keyboard = "0.5.0"
 [dependencies.lazy_static]
 version = "1.0"
 features = ["spin_no_std"]
+
+[dependencies.bootloader]
+version = "0.9.8"
+features = ["map_physical_memory"]
 
 [package.metadata.bootimage]
 test-args = [
