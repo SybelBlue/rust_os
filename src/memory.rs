@@ -3,6 +3,7 @@ use x86_64::{
     PhysAddr,
     structures::paging::{PageTable, OffsetPageTable, Page, PhysFrame, Mapper, Size4KiB, FrameAllocator}
 };
+use bootloader::bootinfo::{MemoryMap, MemoryRegionType};
 
 /// Initialize a new OffsetPageTable.
 ///
@@ -58,5 +59,38 @@ pub struct EmptyFrameAllocator;
 unsafe impl FrameAllocator<Size4KiB> for EmptyFrameAllocator {
     fn allocate_frame(&mut self) -> Option<PhysFrame> {
         None
+    }
+}
+
+pub struct BootInfoFrameAllocator {
+    memory_map: &'static MemoryMap,
+    next: usize,
+}
+
+impl BootInfoFrameAllocator {
+    /// Create a FrameAllocator from the passed memory map.
+    ///
+    /// This function is unsafe because the caller must guarantee that the passed
+    /// memory map is valid. The main requirement is that all frames that are marked
+    /// as `USABLE` in it are really unused.
+    pub unsafe fn init(memory_map: &'static MemoryMap) -> Self {
+        BootInfoFrameAllocator {
+            memory_map,
+            next: 0,
+        }
+    }
+
+    fn usuable_frames(&self) -> impl Iterator<Item = PhysFrame> {
+        self.memory_map.iter() // regions
+            // filter for usable
+            .filter(|r| r.region_type == MemoryRegionType::Usable)
+            // extract all possible usable addresses
+            .map(|r| r.range.start_addr()..r.range.end_addr())
+            // get the exact usable frame addresses
+            .flat_map(|r| r.step_by(4096))
+            // make into Physical Addresses
+            .map(PhysAddr::new)
+            // convert into a frame
+            .map(PhysFrame::containing_address)
     }
 }
