@@ -6,6 +6,10 @@
 
 #![feature(abi_x86_interrupt)]
 
+#![feature(alloc_error_handler)] // at the top of the file
+
+extern crate alloc;
+
 use core::panic::PanicInfo;
 #[cfg(test)]
 use bootloader::{BootInfo, entry_point};
@@ -21,6 +25,11 @@ pub mod allocator;
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
     test_panic_handler(info)
+}
+
+#[alloc_error_handler]
+fn alloc_error_handler(layout: alloc::alloc::Layout) -> ! {
+    panic!("allocation error: {:?}", layout)
 }
 
 pub trait Testable {

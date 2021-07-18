@@ -4,6 +4,10 @@
 #![test_runner(rust_os::test_runner)]
 #![reexport_test_harness_main = "test_main"]
 
+extern crate alloc;
+
+use alloc::boxed::Box;
+
 use rust_os::println;
 use core::panic::PanicInfo;
 use bootloader::{BootInfo, entry_point};
@@ -23,6 +27,8 @@ fn kernel_main(boot_info: &'static BootInfo) -> ! {
     let mut frame_allocator = unsafe {
         BootInfoFrameAllocator::init(&boot_info.memory_map)
     };
+
+    let _ = Box::new(42);
 
     // map an unused page
     let page = Page::containing_address(VirtAddr::new(0));
