@@ -6,7 +6,7 @@
 
 extern crate alloc;
 
-use alloc::boxed::Box;
+use alloc::{boxed::Box, rc::Rc, vec};
 
 use rust_os::println;
 use core::panic::PanicInfo;
@@ -28,7 +28,17 @@ fn kernel_main(boot_info: &'static BootInfo) -> ! {
         BootInfoFrameAllocator::init(&boot_info.memory_map)
     };
 
-    let _ = Box::new(42);
+    rust_os::allocator::init_heap(&mut mapper, &mut frame_allocator)
+        .expect("heap initialization failed");
+
+    let x = Box::new(42);
+    println!("heaped x: {:p}", x);
+
+    let reference_counted = Rc::new(vec![1, 2, 3]);
+    let cloned_reference = reference_counted.clone();
+    println!("current reference count is {}", Rc::strong_count(&cloned_reference));
+    core::mem::drop(reference_counted);
+    println!("reference count is {} now", Rc::strong_count(&cloned_reference));
 
     // map an unused page
     let page = Page::containing_address(VirtAddr::new(0));
