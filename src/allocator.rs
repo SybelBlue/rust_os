@@ -9,6 +9,7 @@ use x86_64::{
 
 pub mod bump;
 pub mod linked_list;
+pub mod fixed_size_block;
 
 use linked_list::LinkedListAllocator;
 
