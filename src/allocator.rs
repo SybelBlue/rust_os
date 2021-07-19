@@ -9,6 +9,8 @@ use x86_64::{
 
 use linked_list_allocator::LockedHeap;
 
+pub mod bump;
+
 #[global_allocator]
 static ALLOCATOR: LockedHeap = LockedHeap::empty();
 
