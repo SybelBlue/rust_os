@@ -8,11 +8,12 @@ use x86_64::{
 };
 
 pub mod bump;
+pub mod linked_list;
 
 use bump::BumpAllocator;
 
 #[global_allocator]
-static ALLOCATOR: Locked<BumpAllocator> = Locked<BumpAllocator>::new(BumpAllocator::new());
+static ALLOCATOR: Locked<BumpAllocator> = Locked::new(BumpAllocator::new());
 
 pub const HEAP_START: usize = 0x_4444_4444_0000;
 pub const HEAP_SIZE: usize = 100 * 1024; // 100 KiB
