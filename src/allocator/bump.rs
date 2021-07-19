@@ -3,6 +3,9 @@ use core::ptr;
 
 use super::{align_up, Locked};
 
+/// Highly innefficient allocator.
+/// Only one poorly placed long-lived value can hold up freeing
+/// the entire heap of otherwise freed values
 pub struct BumpAllocator {
     heap_start: usize,
     heap_end: usize,

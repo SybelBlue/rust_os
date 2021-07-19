@@ -22,6 +22,9 @@ impl ListNode {
     }
 }
 
+/// Much better allocator than Bump, but
+/// not the most efficient. Requires list
+/// traversal to provide a new block
 pub struct LinkedListAllocator {
     head: ListNode,
 }
